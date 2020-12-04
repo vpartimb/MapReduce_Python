@@ -79,7 +79,7 @@ def main():
                         myProcess = sp.run(cmd, shell=True, capture_output=True, timeout=20)
                         # Trying to copy file
                         cmd = f'scp -r -p /tmp/vpartimbene/shuffles/{wordHash}-{machine}.txt vpartimbene@' + listMachines[machineIndex] + ':/tmp/vpartimbene/shufflesreceived/'
-                        myProcess = sp.run(cmd, shell=True, capture_output=True, timeout=20)
+                        myProcess = sp.run(cmd, shell=True, capture_output=True, timeout=1000)
                     except sp.CalledProcessError:
                         print(f'Shuffling on ' + machine + ' failed')
                 else:

@@ -45,10 +45,10 @@ def cleanMachine(directory, machine):
     try:
         # Trying directory removal on the remote machine
         cmd = 'ssh -o "StrictHostKeyChecking=no" vpartimbene@' + machine + ' rm -rf ' + directory
-        myProcess = sp.run(cmd, shell=True, capture_output=True, timeout=20)
+        myProcess = sp.run(cmd, shell=True, capture_output=True, timeout=50)
     # If timeout is reached
     except sp.TimeoutExpired:
-        print(machine + " is down")
+        print("    " +  machine + " is down")
         pass
     # If command line returns something
     else:

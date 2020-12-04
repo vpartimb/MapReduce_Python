@@ -8,7 +8,7 @@ from os import listdir
 from os.path import isfile, join
 import random
 
-# os.chdir(r"C:\Users\vince\Google Drive\MS BGD\Cours\INF727_Systemes_repartis_pour_Big_Data\TP")
+nbMachines = 2
 
 def openFile(file):
     """
@@ -51,7 +51,7 @@ def runSlave(machine, option, file=None):
             myProcess = sp.run(cmd, shell=True, capture_output=True)
         else:
             cmd = 'ssh -o "StrictHostKeyChecking=no" vpartimbene@' + machine + ' python3 /tmp/vpartimbene/SLAVE.py ' + option + ' ' + file
-            myProcess = sp.run(cmd, shell=True, capture_output=True, timeout=600)
+            myProcess = sp.run(cmd, shell=True, capture_output=True, timeout=1000)
     # If timeout is reached
     except sp.TimeoutExpired:
         print("    Machine " + machine + " is down")
@@ -73,10 +73,10 @@ def copySplitToMachine(split, machine):
     try:
         # Trying directory creation on the remote machine
         cmd = 'ssh -o "StrictHostKeyChecking=no" vpartimbene@' + machine + ' mkdir -p /tmp/vpartimbene/splits'
-        myProcess = sp.run(cmd, shell=True, capture_output=True, timeout=50)
+        myProcess = sp.run(cmd, shell=True, capture_output=True, timeout=1000)
         # Trying to copy file
         cmd = 'scp -r -p /tmp/vpartimbene/splits/' + split + ' vpartimbene@' + machine + ':/tmp/vpartimbene/splits/'
-        myProcess = sp.run(cmd, shell=True, capture_output=True, timeout=50)
+        myProcess = sp.run(cmd, shell=True, capture_output=True, timeout=1000)
     # If timeout is reached
     except sp.TimeoutExpired:
         print("    Machine " + machine + " is down")
@@ -164,7 +164,7 @@ if __name__ == '__main__':
     print("Found in " + str(time.time() - start) + " s", end="\n\n")
 
     # Split of input file
-    readAndSplit('deontologie_police_nationale.txt', 4)
+    readAndSplit('travail.txt', nbMachines)
     print('')
 
     splits = [f for f in listdir("/tmp/vpartimbene/splits") if isfile(join("/tmp/vpartimbene/splits", f))]
